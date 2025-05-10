@@ -1,4 +1,5 @@
 import 'package:app1/config/constants.dart';
+import 'package:app1/pages/fruit_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app1/models/fruit.dart';
 
@@ -17,11 +18,12 @@ class FruitCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(
-            context,
-            '/fruit_detail',
-            arguments: fruit,
-          );
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FruitDetailScreen(fruit: fruit),
+              ),
+            );
         },
         child: Stack(
           fit: StackFit.expand,
@@ -68,19 +70,35 @@ class FruitCard extends StatelessWidget {
   }
 
   Widget _buildFruitImage() {
-    return Image.network(
-      '${AppConstants.apiURL}/static/${fruit.imageUrl}',
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          color: Theme.of(context).colorScheme.secondary.withValues(alpha: .2),
-          child: Icon(
-            Icons.image_not_supported,
-            size: 50,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-        );
-      },
+  // Check if imageUrl is null
+  if (fruit.imageUrl == null) {
+    // Return the placeholder with error icon directly
+    return Builder(
+      builder: (context) => Container(
+        color: Theme.of(context).colorScheme.secondary.withValues(alpha: .2),
+        child: Icon(
+          Icons.image_not_supported,
+          size: 50,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
     );
   }
+  
+  // If imageUrl exists, proceed with network image
+  return Image.network(
+    '${AppConstants.apiURL}/static/${fruit.imageUrl}',
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      return Container(
+        color: Theme.of(context).colorScheme.secondary.withValues(alpha: .2),
+        child: Icon(
+          Icons.image_not_supported,
+          size: 50,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      );
+    },
+  );
+}
 }

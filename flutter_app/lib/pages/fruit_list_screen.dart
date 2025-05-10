@@ -35,6 +35,7 @@ class _FruitListScreenState extends State<FruitListScreen> {
       setState(() {
         _isLoading = false;
       });
+      if (!mounted) return; // If widget is not mounted, return
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error loading fruits: ${e.toString()}'),
@@ -138,7 +139,7 @@ class _FruitListScreenState extends State<FruitListScreen> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.85,
+                              childAspectRatio: 1.0,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
                             ),
