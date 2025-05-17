@@ -2,6 +2,8 @@ import 'package:app1/pages/create_fruits_screen.dart';
 import 'package:app1/pages/fruit_list_screen.dart';
 import 'package:app1/pages/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,6 +21,7 @@ class _HomeState extends State<Home> {
     '/new_fruit': const CreateFruitsScreen(),
     '/fruits': const FruitListScreen(),
   };
+  
   void _onTap(index) {
     setState(() {
       _currentIndex = index;
@@ -27,6 +30,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    
+    // If user is not authenticated, redirect to login
+    if (!authProvider.isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed('/login');
+      });
+    }
+
     return Scaffold(
       body: IndexedStack(
           index: _currentIndex,
@@ -38,7 +50,7 @@ class _HomeState extends State<Home> {
                     color: Theme.of(context)
                         .colorScheme
                         .secondary
-                        .withValues(alpha: .2),
+                        .withOpacity(0.2),
                     width: 1))),
         child: BottomNavigationBar(
             onTap: _onTap,

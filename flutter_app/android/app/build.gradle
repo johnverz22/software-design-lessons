@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"  // Google Services plugin for Firebase
 }
 
 android {
@@ -43,6 +44,18 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+}
+
+dependencies {
+    // Add the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    
+    // Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+    
+    // Add support for multidex to handle the large number of methods in the app
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 flutter {
